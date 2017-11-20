@@ -1,4 +1,22 @@
 ## Bluetooth 모듈
+
+### gradle 추가
+1. app gradle
+``` java
+  allprojects {
+		repositories {
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+2. 프로젝트 gradle
+``` java
+  dependencies {
+		compile 'com.github.jjongkwon2:BluetoothLibrary:1.0.1'
+	}
+```
+
+
 ### 사용 전 권한 허가
 1. Manifests
 ``` java
