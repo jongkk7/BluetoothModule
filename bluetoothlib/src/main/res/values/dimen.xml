@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- scan activity -->
+    <dimen name="scan_title_height">40dp</dimen>
+    <dimen name="scan_button_height">50dp</dimen>
+    <dimen name="scan_activity_width">300dp</dimen>
+    <dimen name="scan_activity_height">450dp</dimen>
+
+
+</resources>

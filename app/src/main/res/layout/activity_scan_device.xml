@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="@dimen/scan_activity_width"
+    android:layout_height="@dimen/scan_activity_height">
+
+    <!-- Title Bar -->
+    <RelativeLayout
+        android:id="@+id/titleBar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/scan_title_height">
+
+        <TextView
+            android:text="장치검색"
+            android:textColor="@color/title_text_color"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/deviceListView"
+        android:layout_below="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <Button
+        android:id="@+id/scanButton"
+        android:text="중지"
+        android:textColor="@color/title_button_color"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/scan_button_height" />
+
+
+</RelativeLayout>
