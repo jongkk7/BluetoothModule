@@ -66,11 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
             if(!deviceAddress.equals("null")){
-//                Intent intent = new Intent(MainActivity.this, DeviceControlActivity.class);
-//                intent.putExtra(Data.ADDRESS, deviceAddress);
-//                intent.putExtra(Data.NAME, deviceName);
-//
-//                startActivity(intent);
+
             }
         }
     }
