@@ -16,6 +16,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".bluetooth.DeviceScanActivity" android:theme="@style/ScanTheme"/>
+
+        <service android:name=".bluetooth.BluetoothLeService" android:enabled="true"/>
     </application>
 
 </manifest>

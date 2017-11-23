@@ -9,8 +9,7 @@ import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.nainfox.bluetoothmodule.bluetooth.Data;
-import com.nainfox.bluetoothmodule.bluetooth.DeviceScanActivity;
+import com.nainfox.bluetoothmodule.bluetooth.*;
 
 import java.util.ArrayList;
 
@@ -56,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -66,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
             if(!deviceAddress.equals("null")){
-
+                Intent i = new Intent(getApplicationContext(), DeviceControlActivity.class);
+                i.putExtra(Data.EXTRAS_DEVICE_NAME, deviceName);
+                i.putExtra(Data.EXTRAS_DEVICE_ADDRESS, deviceAddress);
+                startActivity(i);
             }
         }
     }
