@@ -154,4 +154,17 @@ public class DeviceScanActivity extends AppCompatActivity {
         scanLeDevice(false);
         mLeDeviceListAdapter.clear();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scanLeDevice(false);
+        mLeDeviceListAdapter.clear();
+    }
+
+    @Override
+    public void onBackPressed() {
+        scanLeDevice(false);
+        super.onBackPressed();
+    }
 }

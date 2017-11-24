@@ -255,17 +255,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Data.REQUEST_ENABLE_BT){
-            deviceName =  data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
-            deviceAddress = data.getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
+        if(resultCode == RESULT_OK) {
+          if(requestCode == Data.REQUEST_ENABLE_BT){
+              deviceName =  data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
+              deviceAddress = data.getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
 
-            Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
-            if(!deviceAddress.equals("null")){
-                Intent i = new Intent(getApplicationContext(), DeviceControlActivity.class);
-                i.putExtra(Data.EXTRAS_DEVICE_NAME, deviceName);
-                i.putExtra(Data.EXTRAS_DEVICE_ADDRESS, deviceAddress);
-                startActivity(i);
-            }
+              Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
+              if(!deviceAddress.equals("null")){
+                  Intent i = new Intent(getApplicationContext(), DeviceControlActivity.class);
+                  i.putExtra(Data.EXTRAS_DEVICE_NAME, deviceName);
+                  i.putExtra(Data.EXTRAS_DEVICE_ADDRESS, deviceAddress);
+                  startActivity(i);
+              }
+          }
         }
     }
 }

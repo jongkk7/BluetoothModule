@@ -131,7 +131,12 @@ public class DeviceControl {
     }
 
     public void setDeviceName(String name){
-
+        try {
+            BluetoothGattCharacteristic localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(0)).get(0);
+            this.mBluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, name);
+        }catch (Exception e){
+            Log.e(TAG,"setDevieName() error : " + e.getMessage());
+        }
     }
 
 

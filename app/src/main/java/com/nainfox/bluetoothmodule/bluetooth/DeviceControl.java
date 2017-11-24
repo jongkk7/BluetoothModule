@@ -122,7 +122,7 @@ public class DeviceControl {
                         localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(i)).get(j);
                         this.mBluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, data);
                     }catch (Exception e){
-                        Log.d(TAG,"sendData error : " + e.getMessage());
+                        Log.e(TAG,"sendData() error : " + e.getMessage());
                     }
                 }
             }
@@ -131,7 +131,12 @@ public class DeviceControl {
     }
 
     public void setDeviceName(String name){
-
+        try {
+            BluetoothGattCharacteristic localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(0)).get(0);
+            this.mBluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, name);
+        }catch (Exception e){
+            Log.e(TAG,"setDevieName() error : " + e.getMessage());
+        }
     }
 
 
