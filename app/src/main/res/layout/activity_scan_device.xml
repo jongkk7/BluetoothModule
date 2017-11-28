@@ -24,6 +24,7 @@
 
     <ListView
         android:id="@+id/deviceListView"
+        android:layout_above="@+id/scanButton"
         android:layout_below="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

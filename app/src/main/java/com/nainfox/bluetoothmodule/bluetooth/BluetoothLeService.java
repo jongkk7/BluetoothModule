@@ -383,6 +383,6 @@ public class BluetoothLeService extends Service {
 
         paramBluetoothGattCharacteristic.setValue(paramString.getBytes());
         boolean bool = this.mBluetoothGatt.writeCharacteristic(paramBluetoothGattCharacteristic);
-        Log.d(TAG, "writeCharacteristic : " + bool);
+        //Log.d(TAG, "writeCharacteristic : " + bool);
     }
 }

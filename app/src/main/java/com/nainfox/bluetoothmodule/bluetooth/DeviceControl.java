@@ -69,7 +69,7 @@ public class DeviceControl {
     // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
-    public final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -96,7 +96,7 @@ public class DeviceControl {
                                         localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) mGattCharacteristics.get(i)).get(j);
                                         mBluetoothLeService.setCharacteristicNotification(localBluetoothGattCharacteristic, true);
                                     }catch (Exception e){
-                                        Log.d(TAG,"index error : " + e.getMessage());
+                                        //Log.d(TAG,"index error : " + e.getMessage());
                                     }
                                 }
                             }
@@ -122,7 +122,7 @@ public class DeviceControl {
                         localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(i)).get(j);
                         this.mBluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, data);
                     }catch (Exception e){
-                        Log.e(TAG,"sendData() error : " + e.getMessage());
+                        //Log.e(TAG,"sendData() error : " + e.getMessage());
                     }
                 }
             }

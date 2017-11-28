@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -45,17 +46,8 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         init();
 
-        Button sensor1 = (Button) findViewById(R.id.sensor1);
-        sensor1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    deviceControl.sendData("sensor1");
-                }catch (Exception e){
-                    Log.d(TAG,"sendData error : " + e.getMessage());
-                }
-            }
-        });
+        initButton();
+
     }
 
     private void init(){
@@ -67,6 +59,46 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, deviceControl.mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    private void initButton(){
+        Button nameBtn = (Button) findViewById(R.id.nameButton);
+        Button sensor1 = (Button) findViewById(R.id.sensor1);
+        Button sensor2 = (Button) findViewById(R.id.sensor2);
+        Button sensor3 = (Button) findViewById(R.id.sensor3);
+        Button sensor4 = (Button) findViewById(R.id.sensor4);
+
+        nameBtn.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   EditText editText = (EditText) findViewById(R.id.device_name);
+                   String deviceName = editText.getText().toString();
+                   if(deviceName.equals("")){
+                       Toast.makeText(DeviceControlActivity.this, "이름을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                       return;
+                   }
+                   deviceControl.setDeviceName(editText.getText().toString());
+               }
+        });
+
+        sensor1.setOnClickListener(new ButtonClickListener());
+        sensor2.setOnClickListener(new ButtonClickListener());
+        sensor3.setOnClickListener(new ButtonClickListener());
+        sensor4.setOnClickListener(new ButtonClickListener());
+
+    }
+
+    private class ButtonClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+            try {
+                String sensor = ((Button) view).getText().toString();
+                deviceControl.sendData(sensor);
+            }catch (Exception e){
+                Log.d(TAG, "sendData error : " + e.getMessage());
+            }
+        }
     }
 
     @Override

@@ -87,7 +87,13 @@ public class DeviceScanActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mScanning = !mScanning;
                 scanLeDevice(mScanning);
+                if(mScanning){
+                    scanButton.setText("중지");
+                }else{
+                    scanButton.setText("검색");
+                }
             }
         });
     }

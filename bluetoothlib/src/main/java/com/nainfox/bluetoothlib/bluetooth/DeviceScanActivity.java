@@ -88,7 +88,13 @@ public class DeviceScanActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mScanning = !mScanning;
                 scanLeDevice(mScanning);
+                if(mScanning){
+                    scanButton.setText("중지");
+                }else{
+                    scanButton.setText("검색");
+                }
             }
         });
     }
@@ -154,5 +160,18 @@ public class DeviceScanActivity extends AppCompatActivity {
         super.onPause();
         scanLeDevice(false);
         mLeDeviceListAdapter.clear();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scanLeDevice(false);
+        mLeDeviceListAdapter.clear();
+    }
+
+    @Override
+    public void onBackPressed() {
+        scanLeDevice(false);
+        super.onBackPressed();
     }
 }

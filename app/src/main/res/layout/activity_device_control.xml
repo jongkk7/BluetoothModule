@@ -116,7 +116,7 @@
 
             <Button
                 android:id="@+id/sensor4"
-                android:text="color"
+                android:text="sensor4"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />

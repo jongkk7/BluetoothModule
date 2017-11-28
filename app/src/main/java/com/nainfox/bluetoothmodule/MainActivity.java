@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
-            if (requestCode == Data.REQUEST_ENABLE_BT) {
+        if (requestCode == Data.REQUEST_ENABLE_BT) {
+            try {
                 deviceName = data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
                 deviceAddress = data.getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
 
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra(Data.EXTRAS_DEVICE_ADDRESS, deviceAddress);
                     startActivity(i);
                 }
+            }catch (Exception e){
+                Log.e(TAG, "error : " + e.getMessage());
             }
         }
     }
