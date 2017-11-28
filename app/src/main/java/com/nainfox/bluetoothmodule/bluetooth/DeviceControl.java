@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * Created by yjk on 2017. 11. 15..
  */
-
 public class DeviceControl {
     private final static String TAG = "### DeviceControl";
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -36,7 +35,7 @@ public class DeviceControl {
     public BluetoothLeService mBluetoothLeService;
     private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
-    private boolean mConnected = false;
+    public boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
 
     public DeviceControl(String address){
@@ -89,17 +88,17 @@ public class DeviceControl {
                     public void run()
                     {
 
-                            BluetoothGattCharacteristic localBluetoothGattCharacteristic;
-                            for(int i=0 ; i<=4 ; i++){
-                                for(int j=0; j<4 ; j++){
-                                    try {
-                                        localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) mGattCharacteristics.get(i)).get(j);
-                                        mBluetoothLeService.setCharacteristicNotification(localBluetoothGattCharacteristic, true);
-                                    }catch (Exception e){
-                                        //Log.d(TAG,"index error : " + e.getMessage());
-                                    }
+                        BluetoothGattCharacteristic localBluetoothGattCharacteristic;
+                        for(int i=0 ; i<=4 ; i++){
+                            for(int j=0; j<4 ; j++){
+                                try {
+                                    localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) mGattCharacteristics.get(i)).get(j);
+                                    mBluetoothLeService.setCharacteristicNotification(localBluetoothGattCharacteristic, true);
+                                }catch (Exception e){
+                                    //Log.d(TAG,"index error : " + e.getMessage());
                                 }
                             }
+                        }
 
                     }
                 }, 1000L);
