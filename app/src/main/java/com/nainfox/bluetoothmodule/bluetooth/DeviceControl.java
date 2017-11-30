@@ -33,7 +33,7 @@ public class DeviceControl {
     private final String LIST_UUID = "UUID";
 
     public BluetoothLeService mBluetoothLeService;
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
+    public ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     public boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
