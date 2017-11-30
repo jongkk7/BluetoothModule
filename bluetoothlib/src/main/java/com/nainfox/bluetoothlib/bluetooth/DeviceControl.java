@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * Created by yjk on 2017. 11. 15..
  */
-
 public class DeviceControl {
     private final static String TAG = "### DeviceControl";
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -34,7 +33,7 @@ public class DeviceControl {
     private final String LIST_UUID = "UUID";
 
     public BluetoothLeService mBluetoothLeService;
-    public ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
+    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     public boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
@@ -50,7 +49,7 @@ public class DeviceControl {
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Log.e(TAG, "블루투스 초기화에 실패했습니다.");
             }
             // Automatically connects to the device upon successful start-up initialization.
             mBluetoothLeService.connect(mDeviceAddress);
@@ -59,9 +58,23 @@ public class DeviceControl {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAG, "onServiceDisconnected : 서비스 연결해제");
             mBluetoothLeService = null;
         }
     };
+
+
+    /**
+     * 연결 상태 반환
+     * @return
+     */
+    public boolean getConnectionStatus(){
+        if(mBluetoothLeService.getStatus() == BluetoothLeService.STATE_CONNECTED){
+            return true;
+        }
+
+        return false;
+    }
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -69,6 +82,9 @@ public class DeviceControl {
     // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
+    /**
+     * 리시버 ( 연결 성공시 , 연결 해제 , 장치 발견 시 , 데이터 수신 시 )
+     */
     public BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -130,6 +146,10 @@ public class DeviceControl {
         }
     }
 
+    /**
+     * 연결된 디바이스 이름 변경
+     * @param name
+     */
     public void setDeviceName(String name){
         try {
             BluetoothGattCharacteristic localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(0)).get(0);

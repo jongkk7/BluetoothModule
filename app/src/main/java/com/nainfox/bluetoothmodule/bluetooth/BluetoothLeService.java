@@ -48,9 +48,9 @@ public class BluetoothLeService extends Service {
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTING = 1;
+    public static final int STATE_CONNECTED = 2;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le3.ACTION_GATT_CONNECTED";
@@ -80,6 +80,9 @@ public class BluetoothLeService extends Service {
         UUID_FBL770_SPP_WRITE = UUID.fromString(SampleGattAttributes.FBL770_SPP_WRITE);
     }
 
+    public int getStatus(){
+        return mConnectionState;
+    }
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
