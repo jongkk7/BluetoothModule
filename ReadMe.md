@@ -15,7 +15,8 @@
 
 ``` java
   dependencies {
-		compile 'com.github.jjongkwon2:BluetoothLibrary:1.0.1'
+		compile 'com.github.jjongkwon2:BluetoothLibrary:{last release version}'
+    //compile 'com.github.jjongkwon2:BluetoothLibrary:{1.1.1}'
 	}
 ```
 
@@ -61,283 +62,96 @@ PermissionListener permissionlistener = new PermissionListener() {
 ```
 
 
-## 블루투스 장치 검색 ( MainActivity.java )
-+ 내장되어있는 DeviceScanActivity를 사용
-
+## 블루투스 컨트롤러 ( BluetoothControllor )
+1. 컨트롤러 생성
 ``` java
-  private void bluetoothScan(){
-        Intent i = new Intent(this, DeviceScanActivity.class);
-        // REQUEST_ENABLE_BT : bluetoothlib에서 제공하는 Data 클래스의 정수값
-        startActivityForResult(i, Data.REQUEST_ENABLE_BT);
-  }
-
-  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Data.REQUEST_ENABLE_BT){
-            // 장치 리스트에서 클릭한 장치이름과 주소를 넘겨준다. ( 주소값 중요 )
-            deviceName =  data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
-            deviceAddress = data.getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
-
-            Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
-            if(!deviceAddress.equals("null")){
-                // 장치와 1:1 통신을 하는 Activity로 넘어간다.
-                // 주소값으로 연결을 시도한 뒤 성공하면 데이터를 셋팅하고 정보를 주고 받는다.
-                Intent intent = new Intent(MainActivity.this, DeviceControlActivity.class);
-                intent.putExtra(Data.ADDRESS, deviceAddress);
-                intent.putExtra(Data.NAME, deviceName);
-
-                startActivity(intent);
-            }
-        }
-    }
+  BluetoothControllor bluetoothControllor = new BluetoothControllor(this, config);
 ```
 
-
-## 블루투스 통신 ( DeviceControlActivity 클래스 )
-
-+ 서비스 등록, 통신 준비
-
+2. 블루투스 통신(서비스)으로 부터 데이터를 받을 BroadcastReceiver를 생성, 등록한다.
 ``` java
-  private DeviceControl deviceControl;
-
-  private void init(){
-        // 선택된 장치의 주소값
-        String deviceAddress = getIntent().getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
-
-        // 통신을 위한 클래스 생성
-        deviceControl = new DeviceControl(deviceAddress);
-
-        // BLE 서비스 등록
-        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        bindService(gattServiceIntent, deviceControl.mServiceConnection, BIND_AUTO_CREATE);
-    }
-```
-
-+ 브로드캐스트 리시버 등록 & 해제
-
-``` java
-  @Override
-  protected void onResume() {
-      super.onResume();
-
-      registerReceiver(deviceControl.mGattUpdateReceiver, deviceControl.makeGattUpdateIntentFilter());
-      if (deviceControl.mBluetoothLeService != null) {
-          final boolean result = deviceControl.mBluetoothLeService.connect(deviceAddress);
-          Log.d(TAG, "Connect request result=" + result);
-      }
-  }
-
-  @Override
-  protected void onPause() {
-      super.onPause();
-      unregisterReceiver(deviceControl.mGattUpdateReceiver);
-  }
-
-  @Override
-  protected void onDestroy() {
-      super.onDestroy();
-      unbindService(deviceControl.mServiceConnection);
-      deviceControl.mBluetoothLeService = null;
-  }
-```
-
-## 메세지 전달
-
-``` java
-  deviceControl.sendData("sensor1");
-```
-
-
-## 그 외
-
-1) 장치 이름 변경
-
-``` java
-  deviceControl.setDeviceName("device01");
-```
-
-2) 브로드캐스트 리시버 변경 ( 유효한 센서 채널을 찾아서 true 시켜줄 것 ! )
-
-``` java
-public final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+  // Receiver 생성
+  private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
           final String action = intent.getAction();
           if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-              mConnected = true;
-              Log.d(TAG, "connected!");
+              // 연결 성공
+              bluetoothController.setConnected(true);
           } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-              mConnected = false;
-              Log.d(TAG, "disconnected!");
+              // 연결 해제
+              bluetoothController.setConnected(false);
           } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-              // 장치 연결이 됐을 경우
-              // 해당 UUID의 설정값을 true로 변경해준다.
-              Log.d("###", "ACTION_GATT_SERVICES_DISCOVERED!!!!");
-              displayGattServices(mBluetoothLeService.getSupportedGattServices());
+              // 장치 발견 ( 통신이 가능하도록 Notification 값을 true로 바꿔준다. )
+              bluetoothController.displayGattServices(bluetoothController.getBluetoothLeService().getSupportedGattServices());
               new Handler().postDelayed(new Runnable()
               {
                   public void run()
                   {
-
-                          BluetoothGattCharacteristic localBluetoothGattCharacteristic;
-                          for(int i=0 ; i<=4 ; i++){
-                              for(int j=0; j<4 ; j++){
-                                  try {
-                                      localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) mGattCharacteristics.get(i)).get(j);
-                                      mBluetoothLeService.setCharacteristicNotification(localBluetoothGattCharacteristic, true);
-                                  }catch (Exception e){
-                                      Log.d(TAG,"index error : " + e.getMessage());
-                                  }
+                      BluetoothGattCharacteristic localBluetoothGattCharacteristic;
+                      // 장치 센서들의 정확한 위치를 알 수 없어서 일단은 for문으로 해결
+                      for(int i=0 ; i<=4 ; i++){
+                          for(int j=0; j<4 ; j++){
+                              try {
+                                  localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) bluetoothController.getmGattCharacteristics().get(i)).get(j);
+                                  bluetoothController.getBluetoothLeService().setCharacteristicNotification(localBluetoothGattCharacteristic, true);
+                              }catch (Exception e){
+                                  // Log.d(TAG,"index error : " + e.getMessage());
                               }
                           }
+                      }
 
                   }
               }, 1000L);
           } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+              // 장치로부터 데이터 수신
               Log.d("### getStringExtra", intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
           }
       }
   };
+
+  // Receiver 등록
+  @Override
+  protected void onResume() {
+      super.onResume();
+
+      if(bluetoothController != null) {
+          registerReceiver(broadcastReceiver, bluetoothController.makeGattUpdateIntentFilter());
+          if (bluetoothController.getBluetoothLeService() != null) {
+              final boolean result = bluetoothController.getBluetoothLeService().connect(deviceAddress);
+              Log.d(TAG, "Connect request result=" + result);
+          }
+      }
+  }
 ```
 
-### Full Source
-
-1.MainActivity
+2. 장치 검색 -> 검색된 장치 클릭 -> 주소값 저장 -> 주소값으로 연결 시도
 ``` java
-public class MainActivity extends AppCompatActivity {
-    private final String TAG = "###MainActivity";
-
-    String deviceName, deviceAddress;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        checkPermission();
-    }
-
-    private void bluetoothScan(){
-        Intent i = new Intent(this, DeviceScanActivity.class);
-        startActivityForResult(i, Data.REQUEST_ENABLE_BT);
-    }
-
-    /**
-     * ACCESS_COARSE_LOCATION / ACCESS_FINE_LOCATION
-     */
-    private void checkPermission(){
-        TedPermission.with(this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("블루투스 통신을 위해 권한을 설정해주세요.")
-                .setDeniedMessage("거부하셨습니다.\n[설정] > [권한] 에서 권한을 허용할 수 있어요.")
-                .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .check();
-    }
-
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(getApplicationContext(), "권한 허가", Toast.LENGTH_SHORT).show();
-            bluetoothScan();
-        }
-        @Override
-        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-            Toast.makeText(getApplicationContext(), "권한 거부로 인하여 블루투스를 사용할 수 없습니다.\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
-          if(requestCode == Data.REQUEST_ENABLE_BT){
-              deviceName =  data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
+  public void startScan(){
+      bluetoothController.startScan();
+  }
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      if (requestCode == Data.REQUEST_ENABLE_BT) {
+          try {
+              deviceName = data.getStringExtra(Data.EXTRAS_DEVICE_NAME);
               deviceAddress = data.getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
 
               Log.d(TAG, "name : " + deviceName + ", address : " + deviceAddress);
-              if(!deviceAddress.equals("null")){
-                  Intent i = new Intent(getApplicationContext(), DeviceControlActivity.class);
-                  i.putExtra(Data.EXTRAS_DEVICE_NAME, deviceName);
-                  i.putExtra(Data.EXTRAS_DEVICE_ADDRESS, deviceAddress);
-                  startActivity(i);
+              if (!deviceAddress.equals("null")) {
+                  // 연결 시도
+                  Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+                  bindService(gattServiceIntent, bluetoothController.getBluetoothLeServiceConnection(deviceAddress), BIND_AUTO_CREATE);
               }
+          }catch (Exception e){
+              Log.e(TAG, "error : " + e.getMessage());
           }
-        }
-    }
-}
+      }
+  }
 ```
+> 주의할 점 ! <br>
+> 서비스가 날려줄 데이터를 받는 브로드 캐스트 리시버를 등록을 해놓아야 제대로 된 값들을 받을 수 있다.
+> onResume()이나 onCreate()에서 미리 생성 후 등록해 주도록 한다.
 
-2.DeviceControlActivity
-``` java
-public class DeviceControlActivity extends AppCompatActivity {
-    private final String TAG = "### DeviceControl";
-
-    String deviceName, deviceAddress;
-
-    private DeviceControl deviceControl;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_control);
-
-        init();
-
-        Button sensor1 = (Button) findViewById(R.id.sensor1);
-        sensor1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    deviceControl.sendData("sensor1");
-                }catch (Exception e){
-                    Log.d(TAG,"sendData error : " + e.getMessage());
-                }
-            }
-        });
-    }
-
-    private void init(){
-
-        deviceAddress = getIntent().getStringExtra(Data.EXTRAS_DEVICE_ADDRESS);
-        Log.d(TAG, "address : " + deviceAddress);
-
-        deviceControl = new DeviceControl(deviceAddress);
-
-        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        bindService(gattServiceIntent, deviceControl.mServiceConnection, BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        registerReceiver(deviceControl.mGattUpdateReceiver, deviceControl.makeGattUpdateIntentFilter());
-        if (deviceControl.mBluetoothLeService != null) {
-            final boolean result = deviceControl.mBluetoothLeService.connect(deviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(deviceControl.mGattUpdateReceiver);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbindService(deviceControl.mServiceConnection);
-        deviceControl.mBluetoothLeService = null;
-    }
-
-
-}
-```
+3. 서비스
