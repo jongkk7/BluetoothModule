@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ public class DeviceScanActivity extends AppCompatActivity {
 
     private ListView deviceListView;
     private Button cancelButton;
-
+    private ImageButton cancelTopButton;
     private Config config;
 
     @Override
@@ -58,10 +59,29 @@ public class DeviceScanActivity extends AppCompatActivity {
         title_textview.setTextColor(Color.parseColor(config.getTitleTextColor()));
         title_textview.setTextSize(config.getTitleTextSize());
 
+
+        // 취소 버튼 셋팅
         cancelButton = (Button) findViewById(R.id.cancel_button);
         cancelButton.setBackgroundColor(Color.parseColor(config.getCancelButtonBackground()));
         cancelButton.setTextColor(Color.parseColor(config.getCancelButtonTextColor()));
         cancelButton.setTextSize(config.getCancleButtonTextSize());
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanLeDevice(false);
+                finish();
+            }
+        });
+
+        cancelTopButton = (ImageButton) findViewById(R.id.cancel_top_button);
+        cancelTopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanLeDevice(false);
+                finish();
+            }
+        });
     }
 
 
@@ -106,16 +126,6 @@ public class DeviceScanActivity extends AppCompatActivity {
             }
         });
 
-
-        // 장치 검색버튼 셋팅
-        cancelButton = (Button) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanLeDevice(false);
-                finish();
-            }
-        });
     }
 
     /**
