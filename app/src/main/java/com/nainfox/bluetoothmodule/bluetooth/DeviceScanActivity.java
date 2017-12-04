@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nainfox.bluetoothmodule.R;
@@ -30,7 +33,9 @@ public class DeviceScanActivity extends AppCompatActivity {
     private Handler mHandler;
 
     private ListView deviceListView;
-    private Button scanButton;
+    private Button cancelButton;
+
+    private Config config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +43,30 @@ public class DeviceScanActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_scan_device);
 
+        initLayout();
         init();
+    }
+
+    private void initLayout(){
+        config = (Config)getIntent().getSerializableExtra(Data.CONFIG);
+
+        RelativeLayout titleBar = (RelativeLayout) findViewById(R.id.titleBar);
+        titleBar.setBackgroundColor(Color.parseColor(config.getTitleBarColor()));
+
+        TextView title_textview = (TextView) findViewById(R.id.title_textview);
+        title_textview.setTextColor(Color.parseColor(config.getTitleTextColor()));
+        title_textview.setTextSize(config.getTitleTextSize());
+
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+        cancelButton.setBackgroundColor(Color.parseColor(config.getCancelButtonBackground()));
+        cancelButton.setTextColor(Color.parseColor(config.getCancelButtonTextColor()));
+        cancelButton.setTextSize(config.getCancleButtonTextSize());
     }
 
 
     private void init(){
         mHandler = new Handler();
+
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
@@ -65,6 +88,7 @@ public class DeviceScanActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
                 if (device == null) return;
+
                 final Intent intent = new Intent();
                 intent.putExtra(Data.EXTRAS_DEVICE_NAME, device.getName());
                 intent.putExtra(Data.EXTRAS_DEVICE_ADDRESS, device.getAddress());
@@ -83,17 +107,12 @@ public class DeviceScanActivity extends AppCompatActivity {
 
 
         // 장치 검색버튼 셋팅
-        scanButton = (Button) findViewById(R.id.scanButton);
-        scanButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mScanning = !mScanning;
-                scanLeDevice(mScanning);
-                if(mScanning){
-                    scanButton.setText("중지");
-                }else{
-                    scanButton.setText("검색");
-                }
+                scanLeDevice(false);
+                finish();
             }
         });
     }
@@ -149,7 +168,7 @@ public class DeviceScanActivity extends AppCompatActivity {
         }
 
         // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter(getApplicationContext());
+        mLeDeviceListAdapter = new LeDeviceListAdapter(getApplicationContext(), config);
         deviceListView.setAdapter(mLeDeviceListAdapter);
         scanLeDevice(true);
     }

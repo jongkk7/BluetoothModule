@@ -2,6 +2,7 @@ package com.nainfox.bluetoothmodule.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,13 @@ import java.util.ArrayList;
 public class LeDeviceListAdapter extends BaseAdapter {
     private ArrayList<BluetoothDevice> mLeDevices;
     private LayoutInflater mInflator;
+    private Config config;
 
-    public LeDeviceListAdapter(Context context) {
+    public LeDeviceListAdapter(Context context, Config config) {
         super();
         mLeDevices = new ArrayList<BluetoothDevice>();
         mInflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.config = config;
     }
 
     public void addDevice(BluetoothDevice device) {
@@ -62,8 +65,9 @@ public class LeDeviceListAdapter extends BaseAdapter {
         if (view == null) {
             view = mInflator.inflate(R.layout.listitem_device, null);
             viewHolder = new ViewHolder();
-            viewHolder.deviceAddress = (TextView) view.findViewById(R.id.device_address);
-            viewHolder.deviceName = (TextView) view.findViewById(R.id.device_name);
+            viewHolder.deviceItem = (TextView) view.findViewById(R.id.device_item);
+            viewHolder.deviceItem.setTextSize(config.getDeviceItemTextSize());
+            viewHolder.deviceItem.setTextColor(Color.parseColor(config.getDeviceItemTextColor()));
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -72,16 +76,14 @@ public class LeDeviceListAdapter extends BaseAdapter {
         BluetoothDevice device = mLeDevices.get(i);
         final String deviceName = device.getName();
         if (deviceName != null && deviceName.length() > 0)
-            viewHolder.deviceName.setText(deviceName);
+            viewHolder.deviceItem.setText(deviceName);
         else
-            viewHolder.deviceName.setText(R.string.unknown_device);
-        viewHolder.deviceAddress.setText(device.getAddress());
+            viewHolder.deviceItem.setText(device.getAddress());
 
         return view;
     }
 
     class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
+        TextView deviceItem;
     }
 }

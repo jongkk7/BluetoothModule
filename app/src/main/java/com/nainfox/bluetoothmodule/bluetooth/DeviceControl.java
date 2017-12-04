@@ -69,11 +69,7 @@ public class DeviceControl {
      * @return
      */
     public boolean getConnectionStatus(){
-        if(mBluetoothLeService.getStatus() == BluetoothLeService.STATE_CONNECTED){
-            return true;
-        }
-
-        return false;
+        return mConnected;
     }
 
     // Handles various events fired by the Service.

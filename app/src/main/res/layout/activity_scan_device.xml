@@ -9,13 +9,12 @@
     <!-- Title Bar -->
     <RelativeLayout
         android:id="@+id/titleBar"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/scan_title_height">
 
         <TextView
+            android:id="@+id/title_textview"
             android:text="장치검색"
-            android:textColor="@color/title_text_color"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -24,18 +23,16 @@
 
     <ListView
         android:id="@+id/deviceListView"
-        android:layout_above="@+id/scanButton"
+        android:layout_above="@+id/cancel_button"
         android:layout_below="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
     <Button
-        android:id="@+id/scanButton"
-        android:text="중지"
-        android:textColor="@color/title_button_color"
+        android:id="@+id/cancel_button"
+        android:text="취소"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/scan_button_height" />
 
