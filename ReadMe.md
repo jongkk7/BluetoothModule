@@ -184,3 +184,19 @@ PermissionListener permissionlistener = new PermissionListener() {
     BluetoothController controller = new BluetoothController(this, config);
     controller.startScan();
   ```
+  + Config
+  ``` java
+  // title
+    private String titleBarColor = "#FFFFFFFF";
+    private String titleTextColor = "#FF000000";
+    private int titleTextSize = 24;
+
+    // 리스트 아이템
+    private String deviceItemTextColor = "#FF000000";
+    private int deviceItemTextSize = 30;
+
+    private String cancelButtonBackground = "#FFFFFFFF";
+    private String cancelButtonTextColor = "#FF000000";
+    private int cancleButtonTextSize = 30;
+    private int cancelButtonImage = R.drawable.cancel_btn;
+  ```
