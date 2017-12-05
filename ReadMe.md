@@ -62,13 +62,14 @@ PermissionListener permissionlistener = new PermissionListener() {
 ```
 
 
-## 블루투스 컨트롤러 ( BluetoothControllor )
+## 블루투스 컨트롤러 ( BluetoothController )
 1. 컨트롤러 생성
 ``` java
-  BluetoothControllor bluetoothControllor = new BluetoothControllor(this, config);
+  BluetoothController BluetoothController = new BluetoothController(this, config);
 ```
 
-2. 블루투스 통신(서비스)으로 부터 데이터를 받을 BroadcastReceiver를 생성, 등록한다.
+2. 블루투스 통신(서비스)으로 부터 데이터를 받을 BroadcastReceiver를 생성, 등록한다. <br>
+그 외에 종료 시 서비스를 언바인딩, 리시버를 해제하는 작업을 추가한다.
 ``` java
   // Receiver 생성
   private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -123,11 +124,25 @@ PermissionListener permissionlistener = new PermissionListener() {
           }
       }
   }
+
+  @Override
+  protected void onPause() {
+      super.onPause();
+      unregisterReceiver(broadcastReceiver);
+  }
+
+  @Override
+  protected void onDestroy() {
+      super.onDestroy();
+      unbindService(bluetoothController.getServiceConnection());
+      bluetoothController.initBluetoothLeService();
+  }
 ```
 
-2. 장치 검색 -> 검색된 장치 클릭 -> 주소값 저장 -> 주소값으로 연결 시도
+3. 장치 검색 -> 검색된 장치 클릭 -> 주소값 저장 -> 주소값으로 연결 시도
 ``` java
   public void startScan(){
+      // 장치 검색
       bluetoothController.startScan();
   }
   @Override
@@ -154,4 +169,18 @@ PermissionListener permissionlistener = new PermissionListener() {
 > 서비스가 날려줄 데이터를 받는 브로드 캐스트 리시버를 등록을 해놓아야 제대로 된 값들을 받을 수 있다.
 > onResume()이나 onCreate()에서 미리 생성 후 등록해 주도록 한다.
 
-3. 서비스
+3. 그 외 기능들
+  + 연결상태 확인
+  ``` java
+    controller.getConnected();  // 연결상태 반환 (true / false)
+  ```
+  + ScanActivity 스타일 변경
+  ``` java
+    Config config = new Config();
+    config.setTitleBarColor("#FF35F3DE");
+    config.setTitleTextColor("#FF000000");
+    config.setTitleTextSize(25);
+
+    BluetoothController controller = new BluetoothController(this, config);
+    controller.startScan();
+  ```
