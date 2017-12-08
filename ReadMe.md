@@ -16,7 +16,7 @@
 ``` java
   dependencies {
 		compile 'com.github.jjongkwon2:BluetoothLibrary:{last release version}'
-    //compile 'com.github.jjongkwon2:BluetoothLibrary:{1.1.1}'
+    //compile 'com.github.jjongkwon2:BluetoothLibrary:1.1.1'
 	}
 ```
 

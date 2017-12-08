@@ -121,6 +121,37 @@ public class BluetoothController {
         return mGattCharacteristics;
     }
 
+    /**
+     * 데이터 전송
+     */
+    public void sendData(String data){
+        if (this.mGattCharacteristics != null) {
+            BluetoothGattCharacteristic localBluetoothGattCharacteristic;
+
+            for(int i=0; i<=4; i++){
+                for(int j=0; j<=4; j++) {
+                    try {
+                        if (i == 0 && j == 0) continue;
+                        localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(i)).get(j);
+                        bluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, data);
+                    } catch (Exception e) {
+                        //Log.e(TAG,"sendData() error : " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    public void setDeviceName(String name){
+        try{
+            BluetoothGattCharacteristic bluetoothGattCharacteristic = (BluetoothGattCharacteristic)((ArrayList) this.mGattCharacteristics.get(0)).get(0);
+            this.bluetoothLeService.writeCharacteristics(bluetoothGattCharacteristic, name);
+        }catch (Exception e){
+            Log.e(TAG,"setDevieName() error : " + e.getMessage());
+        }
+    }
+    
+
 
     /**
      * 장치 등록 서비스
