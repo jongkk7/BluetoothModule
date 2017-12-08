@@ -9,28 +9,55 @@ import java.io.Serializable;
  */
 
 public class Config implements Serializable{
-
-    // title
-    private String titleBarColor = "#FFFFFFFF";
-    private String titleTextColor = "#FF000000";
-    private int titleTextSize = 30;
-
-    // 리스트 아이템
-    private String deviceItemTextColor = "#FF000000";
-    private int deviceItemTextSize = 30;
-
-    private String cancelButtonBackground = "#FFFFFFFF";
-    private String cancelButtonTextColor = "#FF000000";
-    private int cancleButtonTextSize = 30;
-    private int cancelButtonImage = R.drawable.cancel_btn;
+    // Title Bar
+    private boolean titleBarBgGradient = true;
+    private String titleBarBackgroundColor = "#FF6471"; // 타이틀바 배경
+    private int titleBarBackroundRes = R.drawable.title_bar_background;       // 타이틀바 배경 ( drawable )
+    private String titleText = "장치연결";
+    private String titleTextColor = "#FFFFFF";
+    private int titleTextSize = 18;
 
 
-    public String getTitleBarColor() {
-        return titleBarColor;
+    // List View Item
+    private String itemTextColor = "#FF000000";
+    private int itemTextSize = 16;
+    private String listViewBackgroundColor = "#22000000";
+
+    // Bottom Cancel Button
+    private String bottomButtonText = "취소";
+    private String bottomButtonTextColor = "#FF6471";
+    private int bottomButtonTextSize = 18;
+    private String bottomButtonBackgroundColor = "#FFFFFFFF";
+
+
+    public String getTitleBarBackgroundColor() {
+        return titleBarBackgroundColor;
     }
 
-    public void setTitleBarColor(String titleBarColor) {
-        this.titleBarColor = titleBarColor;
+    public void setTitleBarBackgroundColor(String titleBarBackgroundColor) {
+        titleBarBgGradient = false;
+        this.titleBarBackgroundColor = titleBarBackgroundColor;
+    }
+
+    public boolean isTitleBarBgGradient() {
+        return titleBarBgGradient;
+    }
+
+    public int getTitleBarBackroundRes() {
+        return titleBarBackroundRes;
+    }
+
+    public void setTitleBarBackroundRes(int titleBarBackroundRes) {
+        titleBarBgGradient = true;
+        this.titleBarBackroundRes = titleBarBackroundRes;
+    }
+
+    public String getTitleText() {
+        return titleText;
+    }
+
+    public void setTitleText(String titleText) {
+        this.titleText = titleText;
     }
 
     public String getTitleTextColor() {
@@ -49,51 +76,59 @@ public class Config implements Serializable{
         this.titleTextSize = titleTextSize;
     }
 
-    public String getDeviceItemTextColor() {
-        return deviceItemTextColor;
+    public String getItemTextColor() {
+        return itemTextColor;
     }
 
-    public void setDeviceItemTextColor(String deviceItemTextColor) {
-        this.deviceItemTextColor = deviceItemTextColor;
+    public void setItemTextColor(String itemTextColor) {
+        this.itemTextColor = itemTextColor;
     }
 
-    public int getDeviceItemTextSize() {
-        return deviceItemTextSize;
+    public int getItemTextSize() {
+        return itemTextSize;
     }
 
-    public void setDeviceItemTextSize(int deviceItemTextSize) {
-        this.deviceItemTextSize = deviceItemTextSize;
+    public void setItemTextSize(int itemTextSize) {
+        this.itemTextSize = itemTextSize;
     }
 
-    public String getCancelButtonBackground() {
-        return cancelButtonBackground;
+    public String getListViewBackgroundColor() {
+        return listViewBackgroundColor;
     }
 
-    public void setCancelButtonBackground(String cancelButtonBackground) {
-        this.cancelButtonBackground = cancelButtonBackground;
+    public void setListViewBackgroundColor(String listViewBackgroundColor) {
+        this.listViewBackgroundColor = listViewBackgroundColor;
     }
 
-    public String getCancelButtonTextColor() {
-        return cancelButtonTextColor;
+    public String getBottomButtonText() {
+        return bottomButtonText;
     }
 
-    public void setCancelButtonTextColor(String cancelButtonTextColor) {
-        this.cancelButtonTextColor = cancelButtonTextColor;
+    public void setBottomButtonText(String bottomButtonText) {
+        this.bottomButtonText = bottomButtonText;
     }
 
-    public int getCancleButtonTextSize() {
-        return cancleButtonTextSize;
+    public String getBottomButtonTextColor() {
+        return bottomButtonTextColor;
     }
 
-    public void setCancleButtonTextSize(int cancleButtonTextSize) {
-        this.cancleButtonTextSize = cancleButtonTextSize;
+    public void setBottomButtonTextColor(String bottomButtonTextColor) {
+        this.bottomButtonTextColor = bottomButtonTextColor;
     }
 
-    public int getCancelButtonImage() {
-        return cancelButtonImage;
+    public int getBottomButtonTextSize() {
+        return bottomButtonTextSize;
     }
 
-    public void setCancelButtonImage(int cancelButtonImage) {
-        this.cancelButtonImage = cancelButtonImage;
+    public void setBottomButtonTextSize(int bottomButtonTextSize) {
+        this.bottomButtonTextSize = bottomButtonTextSize;
+    }
+
+    public String getBottomButtonBackgroundColor() {
+        return bottomButtonBackgroundColor;
+    }
+
+    public void setBottomButtonBackgroundColor(String bottomButtonBackgroundColor) {
+        this.bottomButtonBackgroundColor = bottomButtonBackgroundColor;
     }
 }

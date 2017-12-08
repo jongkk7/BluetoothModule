@@ -7,8 +7,14 @@
     <TextView
         android:id="@+id/device_item"
         android:layout_margin="10dp"
-        android:background="#ffffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 
 </LinearLayout>

@@ -61,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
     // 스캔
     private void initBluetooth(){
         Config config = new Config();
-        config.setTitleBarColor("#99DA8F4A");
 
-        bluetoothController = new BluetoothController(this, config);
+        bluetoothController = new BluetoothController(this);
     }
 
 

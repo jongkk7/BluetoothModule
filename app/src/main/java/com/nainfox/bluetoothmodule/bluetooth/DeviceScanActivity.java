@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,7 +34,11 @@ public class DeviceScanActivity extends AppCompatActivity {
     private Handler mHandler;
 
     private ListView deviceListView;
-    private Button cancelButton;
+
+    private RelativeLayout titleLayout;
+    private TextView titleTextView;
+    private Button bottomCancelButton;
+
 
     private Config config;
 
@@ -50,17 +55,24 @@ public class DeviceScanActivity extends AppCompatActivity {
     private void initLayout(){
         config = (Config)getIntent().getSerializableExtra(Data.CONFIG);
 
-        RelativeLayout titleBar = (RelativeLayout) findViewById(R.id.titleBar);
-        titleBar.setBackgroundColor(Color.parseColor(config.getTitleBarColor()));
+        titleLayout = (RelativeLayout) findViewById(R.id.titleBar);
+        if(config.isTitleBarBgGradient()){
+            titleLayout.setBackgroundResource(config.getTitleBarBackroundRes());
+        }else {
+            titleLayout.setBackgroundColor(Color.parseColor(config.getTitleBarBackgroundColor()));
+        }
 
-        TextView title_textview = (TextView) findViewById(R.id.title_textview);
-        title_textview.setTextColor(Color.parseColor(config.getTitleTextColor()));
-        title_textview.setTextSize(config.getTitleTextSize());
+        titleTextView = (TextView) findViewById(R.id.title_textview);
+        titleTextView.setTextColor(Color.parseColor(config.getTitleTextColor()));
+        titleTextView.setTextSize(config.getTitleTextSize());
+        titleTextView.setText(config.getTitleText());
 
-        cancelButton = (Button) findViewById(R.id.cancel_button);
-        cancelButton.setBackgroundColor(Color.parseColor(config.getCancelButtonBackground()));
-        cancelButton.setTextColor(Color.parseColor(config.getCancelButtonTextColor()));
-        cancelButton.setTextSize(config.getCancleButtonTextSize());
+        bottomCancelButton = (Button) findViewById(R.id.bottom_cancel_button);
+        bottomCancelButton.setBackgroundColor(Color.parseColor(config.getBottomButtonBackgroundColor()));
+        bottomCancelButton.setText(config.getBottomButtonText());
+        bottomCancelButton.setTextColor(Color.parseColor(config.getBottomButtonTextColor()));
+        bottomCancelButton.setTextSize(config.getBottomButtonTextSize());
+
     }
 
 
@@ -83,6 +95,7 @@ public class DeviceScanActivity extends AppCompatActivity {
 
         // 검색된 장치 리스트 셋팅
         deviceListView = (ListView) findViewById(R.id.deviceListView);
+        deviceListView.setDivider(null);
         deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -106,9 +119,8 @@ public class DeviceScanActivity extends AppCompatActivity {
         });
 
 
-        // 장치 검색버튼 셋팅
-        cancelButton = (Button) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        // 취소 버튼 셋팅
+        bottomCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 scanLeDevice(false);

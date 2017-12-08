@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
+    android:layout_gravity="center"
     android:layout_width="@dimen/scan_activity_width"
     android:layout_height="@dimen/scan_activity_height">
 
@@ -14,24 +15,50 @@
 
         <TextView
             android:id="@+id/title_textview"
-            android:text="장치검색"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/progressbarLayout"
+        android:layout_below="@id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+        <TextView
+            android:text="검색중"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/progressbar"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/deviceListView"
-        android:layout_above="@+id/cancel_button"
-        android:layout_below="@+id/titleBar"
+        android:layout_above="@+id/bottom_cancel_button"
+        android:layout_below="@+id/progressbarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
+    <View
+        android:layout_above="@+id/bottom_cancel_button"
+        android:background="@color/whitegray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
     <Button
-        android:id="@+id/cancel_button"
-        android:text="취소"
+        android:id="@+id/bottom_cancel_button"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/scan_button_height" />

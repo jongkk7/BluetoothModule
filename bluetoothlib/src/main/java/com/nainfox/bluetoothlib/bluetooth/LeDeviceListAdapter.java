@@ -64,10 +64,11 @@ public class LeDeviceListAdapter extends BaseAdapter {
         // General ListView optimization code.
         if (view == null) {
             view = mInflator.inflate(R.layout.listitem_device, null);
+            view.setBackgroundColor(Color.parseColor(config.getListViewBackgroundColor()));
             viewHolder = new ViewHolder();
             viewHolder.deviceItem = (TextView) view.findViewById(R.id.device_item);
-            viewHolder.deviceItem.setTextSize(config.getDeviceItemTextSize());
-            viewHolder.deviceItem.setTextColor(Color.parseColor(config.getDeviceItemTextColor()));
+            viewHolder.deviceItem.setTextSize(config.getItemTextSize());
+            viewHolder.deviceItem.setTextColor(Color.parseColor(config.getItemTextColor()));
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
