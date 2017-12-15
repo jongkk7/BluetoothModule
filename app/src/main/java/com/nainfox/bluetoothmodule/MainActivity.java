@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -63,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
         Config config = new Config();
 
         bluetoothController = new BluetoothController(this);
+        final Button sendBtn = (Button) findViewById(R.id.sendBtn);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bluetoothController.getConnected()){
+                    bluetoothController.sendData("sensor1");
+                }else{
+                    Toast.makeText(MainActivity.this, "연결 안됐음", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 

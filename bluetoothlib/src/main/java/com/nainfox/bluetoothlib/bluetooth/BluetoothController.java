@@ -120,7 +120,7 @@ public class BluetoothController {
                         localBluetoothGattCharacteristic = (BluetoothGattCharacteristic) ((ArrayList) this.mGattCharacteristics.get(i)).get(j);
                         bluetoothLeService.writeCharacteristics(localBluetoothGattCharacteristic, data);
                     } catch (Exception e) {
-                        //Log.e(TAG,"sendData() error : " + e.getMessage());
+                        Log.e(TAG,"sendData() error : " + e.getMessage());
                     }
                 }
             }

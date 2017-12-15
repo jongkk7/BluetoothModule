@@ -150,7 +150,7 @@ public class BluetoothController {
             Log.e(TAG,"setDevieName() error : " + e.getMessage());
         }
     }
-    
+
 
 
     /**
