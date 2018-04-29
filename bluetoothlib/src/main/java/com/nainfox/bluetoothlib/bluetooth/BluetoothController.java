@@ -206,6 +206,4 @@ public class BluetoothController {
         return intentFilter;
     }
 
-
-
 }

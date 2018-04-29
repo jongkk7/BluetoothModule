@@ -24,6 +24,7 @@ import java.util.HashMap;
 public class SampleGattAttributes {
     public static HashMap<String, String> attributes = new HashMap();
 
+    public static String SMARTPHONE;
     public static String HEART_RATE_MEASUREMENT;
     public static String CLIENT_CHARACTERISTIC_CONFIG;
     public static String FBL770_ADC0_NOTIFY;
@@ -41,6 +42,7 @@ public class SampleGattAttributes {
     public static String SERIAL_NUMBER;
 
     static {
+        SMARTPHONE = "00001101-0000-1000-8000-00805F9B34FB";
         HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
         CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
         NEXUS6_WRITEXML_CHARA = "f1a42261-aa44-11e2-9e96-0800200c9a66";
@@ -56,6 +58,7 @@ public class SampleGattAttributes {
         FBL770_INIT_SETTING = "0000ffc1-0000-1000-8000-00805f9b34fb";
         FBL770_SPP_WRITE = "0000fff1-0000-1000-8000-00805f9b34fb";
         FBL770_SPP_NOTIFY = "0000fff2-0000-1000-8000-00805f9b34fb";
+        attributes.put(SMARTPHONE,"Smart phone");
         attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
         attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
         attributes.put(NEXUS6_XML_SERVICE, "Nexus6 XML Service");

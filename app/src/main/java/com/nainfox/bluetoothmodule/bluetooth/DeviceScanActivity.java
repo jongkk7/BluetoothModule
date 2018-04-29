@@ -93,6 +93,12 @@ public class DeviceScanActivity extends AppCompatActivity {
             return;
         }
 
+        if(mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON){
+            Log.d("####", "on");
+            mBluetoothAdapter.setName("jjongkwon2");
+        }
+
+
         // 검색된 장치 리스트 셋팅
         deviceListView = (ListView) findViewById(R.id.deviceListView);
         deviceListView.setDivider(null);

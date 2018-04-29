@@ -63,6 +63,7 @@ public class BluetoothLeService extends Service {
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le3.EXTRA_DATA";
 
+    public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     public static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
     public static final UUID UUID_FBL770_ADC0_NOTIFY;
     public static final UUID UUID_FBL770_ADC1_NOTIFY;
